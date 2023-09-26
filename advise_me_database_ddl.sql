@@ -10,7 +10,7 @@ CREATE TABLE AppRole(
 
 CREATE TABLE User(
     userId INT NOT NULL AUTO_INCREMENT,
-    appRole INT NOT NULL,
+    appRoleId INT NOT NULL,
     email VARCHAR(70) NOT NULL,
     username VARCHAR(50) NOT NULL,
     password VARCHAR(150) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE User(
     updatedAt DATETIME ,
 
     CONSTRAINT pk_user PRIMARY KEY (userId),
-    CONSTRAINT fk_app_role FOREIGN KEY (appRole) REFERENCES AppRole(roleId)
+    CONSTRAINT fk_app_role FOREIGN KEY (appRoleId) REFERENCES AppRole(roleId)
 ); 
 
 CREATE TABLE PasswordRecoveryLog(
@@ -84,11 +84,9 @@ CREATE TABLE GuidanceHubPost(
     receivedAdvicesVisibility ENUM("VISIBLE","INVISIBLE") NOT NULL,
     postAnonymity BOOLEAN NOT NULL,
     # The status indicates the current status of the post
-    status ENUM("DELETED","HIDDEN","EDITED","PUBLISHED","PENDING") NOT NULL,
+    status ENUM("HIDDEN","EDITED","PUBLISHED","PENDING") NOT NULL,
     createdAt DATETIME NOT NULL,
     updatedAt DATETIME ,
-    deletedAt DATETIME ,
-    deletedBy VARCHAR(100) ,
 
 
     CONSTRAINT pk_post_id PRIMARY KEY (postId),
@@ -102,12 +100,10 @@ CREATE TABLE GuidancePostAdvice(
     adviceAnonymity BOOLEAN NOT NULL,
     content VARCHAR(500) NOT NULL,
     # The status indicates the current status of the advice
-    status ENUM("DELETED","HIDDEN","EDITED","PUBLISHED","PENDING") NOT NULL,
+    status ENUM("HIDDEN","EDITED","PUBLISHED","PENDING") NOT NULL,
     lastAllowableEditingDate DATETIME NOT NULL,
     createdAt DATETIME NOT NULL,
     updatedAt DATETIME ,
-    deletedAt DATETIME ,
-    deletedBy VARCHAR(100),
 
     CONSTRAINT pk_advice_id PRIMARY KEY (adviceId),
     CONSTRAINT fk_user_id_guidance_post_advice FOREIGN KEY (userId) REFERENCES User(userId),
@@ -120,8 +116,7 @@ CREATE TABLE AdviceVote(
     adviceId INT NOT NULL,
     userId INT NOT NULL,
     voteType ENUM("UP","DOWN") NOT NULL,
-    createdAt DATETIME NOT NULL,
-    updatedAt DATETIME ,
+
 
     CONSTRAINT pk_vote_id PRIMARY KEY (voteId),
     CONSTRAINT fk_user_id_advice_vote FOREIGN KEY (userId) REFERENCES User(userId),
